@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { ThemeContext } from '../theme/ThemeProvider'
 
 const Card = ({ prod, dispatch }) => {
-    const {theme} =useContext(ThemeContext)
 
-
-    
+    const { theme } = useContext(ThemeContext)
 
     return (
-       <div className={`card mb-2 ${theme == 'light' ?'text-bg-light' :'text-bg-secondary'}`}
-     style={{width: "18rem"}}>
+        <div
+            className={`card mb-2 ${
+                theme === 'light'
+                    ? 'text-bg-light'
+                    : 'text-bg-secondary'
+            }`}
+            style={{ width: "18rem" }}
+        >
 
             <img
                 src={prod.thumbnail}
@@ -63,7 +68,8 @@ const Card = ({ prod, dispatch }) => {
                                 prodID: prod.id,
                                 title: prod.title,
                                 price: prod.price,
-                                discountPercentage: prod.discountPercentage
+                                discountPercentage:
+                                    prod.discountPercentage
                             }
                         })
                     }

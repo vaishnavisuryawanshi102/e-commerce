@@ -1,54 +1,49 @@
-import React, { useContext, useEffect, useState } from 'react'
-import Navbar from './Navbar'
-import Footer from './Footer'
-import HeroSection from './HeroSection'
-import Products from './Products'
-import { ThemeContext } from '../theme/ThemeProvider'
+import React, { useContext } from 'react'
+import { FaUser } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import { FaShoppingBag } from "react-icons/fa";
+import { Link } from 'react-router-dom';
+import { ThemeContext } from '../theme/ThemeProvider';
+import { IoSunny, IoSunnyOutline } from "react-icons/io5";
 
-const Dashboard = ({ loggedUser, setLoggedUser, dispatch }) => {
-  const [products, setProducts] = useState([])
-  const [categories, setCategories] = useState([])
-  const {theme} = useContext(ThemeContext)
+const Navbar = ({loggedUser, setLoggedUser}) => {
+  const {theme, toggleTheme} = useContext(ThemeContext)
+  const navigate= useNavigate()
 
-
-  async function fetchData() {
-    await fetch("https://dummyjson.com/products")
-      .then(res => res.json())
-      .then(data => setProducts(data.products))
-      .catch(err => console.log(err))
-      await fetchCategories()
+  function handleLogout(){
+    setLoggedUser('')
+    navigate('/')
   }
 
-  useEffect(() => {
-     fetchData()
-  }, [])
-  // console.log(products)
-
-
-
-  function fetchCategories() {
-    console.log(products)
-    const cats = [...new Set(products.map((p) => {
-      return p.category
-    }))]
-    setCategories(cats)
-  }
-
-
-
-  useEffect(()=>{
-    fetchCategories()
-  },[products])
-  
   return (
-    <section className={`${theme == 'light' ? 'bg-light' : 'bg-dark'}`}>
-      <Navbar loggedUser={loggedUser} setLoggedUser={setLoggedUser} />
-      <HeroSection />
-      <Products products={products} categories={categories} dispatch={dispatch} />
-
-      <Footer />
-    </section>
+    <nav className={`navbar navbar-expand-lg 
+    ${theme == 'light' ? 'bg-body-tertiary' :'bg-dark'}
+    `}
+      data-bs-theme={`${theme == 'light' ? '' : "dark"}`}
+    >
+  <div className="container-fluid">
+    <a className="navbar-brand" href="#">E-Commerce</a>
+    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span className="navbar-toggler-icon"></span>
+    </button>
+    <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div className="navbar-nav">
+        <a className="nav-link active" aria-current="page" href="#">Home</a>
+        <a className="nav-link" href="#">Cart</a>
+        <a className="nav-link" href="#">Pricing</a>
+      </div>
+    </div>
+    <div className="d-flex" role="search">
+        <Link to='/cart'><FaShoppingBag /><sup className='badge '>0</sup></Link>
+        <FaUser /><span className='px-3'>{loggedUser && loggedUser.name}</span>
+        <button onClick={toggleTheme}>
+          {theme == 'light' ? <IoSunnyOutline /> : <IoSunny/>}
+        </button>
+        <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
+      </div>
+  </div>
+</nav>
   )
 }
 
-export default Dashboard
+export default Navbar
