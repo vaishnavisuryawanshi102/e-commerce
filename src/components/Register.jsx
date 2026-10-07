@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useRef, useEffect } from 'react'
 import { Link ,useNavigate} from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 
@@ -8,8 +8,12 @@ const Register = () => {
     const[password, setpassword] = useState('')
     const[confirmPassword, setConfirmPassword] = useState('')
     const navigate = useNavigate()
+    
+    const userInputRef = useRef()
 
-     
+    function textRef(){
+        userInputRef.current.focus
+    }
 
     const handleRegister=(event)=>{
         event.preventDefault()
@@ -28,6 +32,7 @@ const Register = () => {
         }
 
     }
+    useEffect(()=>{textRef()},[])
     return (
         <>
         <div className="container w-50 mt-5">
@@ -41,6 +46,7 @@ const Register = () => {
                     <input type="text" className="form-control"id="exampleInputUser1"
                     value={userName}
                     onChange={(e)=>setUserName(e.target.value)}
+                    ref={userInputRef}
                     />
 
                 </div>
